@@ -2,17 +2,11 @@ name: Verify XSLT transform
 on: push
 
 jobs:
-  verify:
+  smoke-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Build docker image
-        run: docker build -t my-xslt-container .
-
-      - name: Apply XSLT transform
-        run: docker run -v ${{ github.workspace }}:/data my-xslt-container /usr/local/bin/apply-xslt /data/test/input.xml /data/test/stylesheet.xsl > actual.txt
-
       - name: Verify output
-        run: diff -u ./test/expected.txt actual.txt
+        run: ./smoke_tests.sh
