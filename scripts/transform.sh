@@ -4,10 +4,6 @@ INPUT_FILE="$(mktemp)"
 TRANSFORM_FILE="$(mktemp)"
 OUTPUT_FILE="$(mktemp)"
 
-function transform_xml() {
-    docker run -v "./src:/data" -v "$1:/input.xml" -v "$2:/stylesheet.xsl" my-xslt-container /usr/local/bin/apply-xslt /input.xml /stylesheet.xsl
-}
-
 XSL_FILE="$1"
 
 # Get the directory where the script is located
@@ -15,6 +11,10 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 PARENT_DIR="$(dirname "${SCRIPT_DIR}")"
 
 cd "${PARENT_DIR}"
+
+function transform_xml() {
+    docker run -v "${PARENT_DIR}/src:/data" -v "$1:/input.xml" -v "$2:/stylesheet.xsl" my-xslt-container /usr/local/bin/apply-xslt /input.xml /stylesheet.xsl
+}
 
 # Build Docker image
 docker build -t my-xslt-container .
