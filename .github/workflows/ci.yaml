@@ -1,4 +1,4 @@
-name: Verify XSLT transform
+name: Verify XSLT transforms
 on: push
 
 jobs:

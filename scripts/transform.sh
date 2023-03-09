@@ -13,14 +13,17 @@ PARENT_DIR="$(dirname "${SCRIPT_DIR}")"
 cd "${PARENT_DIR}"
 
 function transform_xml() {
-    docker run -v "${PARENT_DIR}/src:/data" -v "$1:/input.xml" -v "$2:/stylesheet.xsl" my-xslt-container /usr/local/bin/apply-xslt /input.xml /stylesheet.xsl
+    docker run --rm -v "${PARENT_DIR}/src:/data" -v "$1:/input.xml" -v "$2:/stylesheet.xsl" epp-biorxiv-xslt /usr/local/bin/apply-xslt /input.xml /stylesheet.xsl
 }
 
-# Build Docker image
-docker build -t my-xslt-container .
+# Check if Docker image exists
+if [[ "$(docker images -q epp-biorxiv-xslt 2> /dev/null)" == "" ]]; then
+    # Build Docker image
+    docker buildx build -t epp-biorxiv-xslt .
+fi
 
 # Preserve hexadecimal notation
-cat /dev/stdin | sed -E "s/&#x([0-9A-F]{4});/HEX\1NOTATION/g" >"${INPUT_FILE}"
+cat /dev/stdin | sed -E "s/&#x([0-9A-F]{4});/HEX\1NOTATION/g" > "${INPUT_FILE}"
 
 # Apply XSLT transform
 if [[ -z "$1" ]]; then
@@ -34,10 +37,10 @@ else
 fi
 
 # Remove empty lines, restore DOCTYPE and restore hexadecimal notation
-cat "${TRANSFORM_FILE}" | sed '/^$/d' | sed "s#<?xml version=\"1.0\" encoding=\"UTF-8\"?>#<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE article PUBLIC \"-//NLM//DTD JATS (Z39.96) Journal Archiving and Interchange DTD v1.2d1 20170631//EN\" \"JATS-archivearticle1.dtd\">\n#g" | sed -E "s/HEX([0-9A-F]{4})NOTATION/\&#x\1;/g" >"${OUTPUT_FILE}"
+cat "${TRANSFORM_FILE}" | sed '/^$/d' | sed "s#<?xml version=\"1.0\" encoding=\"UTF-8\"?>#<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE article PUBLIC \"-//NLM//DTD JATS (Z39.96) Journal Archiving and Interchange DTD v1.2d1 20170631//EN\" \"JATS-archivearticle1.dtd\">\n#g" | sed -E "s/HEX([0-9A-F]{4})NOTATION/\&#x\1;/g" > "${OUTPUT_FILE}"
 
 # Append an empty line to the file
-echo "" >>"${OUTPUT_FILE}"
+echo "" >> "${OUTPUT_FILE}"
 
 cat "${OUTPUT_FILE}"
 
