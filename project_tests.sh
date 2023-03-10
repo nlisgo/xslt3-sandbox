@@ -2,7 +2,6 @@
 set -e
 
 TEST_FILE="$(mktemp)"
-INPUT_FILE="$(mktemp)"
 
 # Get the directory where the script is located
 SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"

@@ -10,25 +10,13 @@ RUN echo "#!/bin/bash\njava -jar /usr/share/java/saxon.jar -s:\$1 -xsl:\$2" > /u
 
 RUN chmod +x /usr/local/bin/apply-xslt
 
-RUN touch /JATS-archivearticle1.dtd
-
 RUN touch /tmp/JATS-archivearticle1.dtd
 
 ENV DOCKER_EPP_BIORXIV_XSLT=1
 
 WORKDIR /app
 
-COPY scripts /app/scripts
-
-RUN chmod +x -R /app/scripts/*
-
-COPY src /app/src
-
-COPY test /app/test
-
-COPY project_tests.sh /app/project_tests.sh
-
-RUN chmod +x /app/project_tests.sh
+COPY . /app
 
 EXPOSE 5006
 
