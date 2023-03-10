@@ -12,9 +12,11 @@ RUN chmod +x /usr/local/bin/apply-xslt
 
 RUN touch /JATS-archivearticle1.dtd
 
-VOLUME /app
-
 WORKDIR /app
+
+COPY scripts /app/scripts
+
+COPY src /app/src
 
 EXPOSE 5005
 

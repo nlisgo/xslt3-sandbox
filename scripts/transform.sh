@@ -44,14 +44,14 @@ PARENT_DIR="$(dirname "${SCRIPT_DIR}")"
 cd "${PARENT_DIR}"
 
 function transform_xml() {
+    # Check if Docker image exists
+    if [[ "$(docker images -q epp-biorxiv-xslt 2> /dev/null)" == "" ]]; then
+        # Build Docker image
+        docker buildx build -t epp-biorxiv-xslt .
+    fi
+
     docker run --rm -v "${PARENT_DIR}/src:/app" -v "$1:/input.xml" -v "$2:/stylesheet.xsl" epp-biorxiv-xslt /usr/local/bin/apply-xslt /input.xml /stylesheet.xsl
 }
-
-# Check if Docker image exists
-if [[ "$(docker images -q epp-biorxiv-xslt 2> /dev/null)" == "" ]]; then
-    # Build Docker image
-    docker buildx build -t epp-biorxiv-xslt .
-fi
 
 # Preserve hexadecimal notation
 cat /dev/stdin | sed -E "s/&#x([0-9A-F]{4});/HEX\1NOTATION/g" > "${INPUT_FILE}"

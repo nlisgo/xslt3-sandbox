@@ -6,6 +6,11 @@ TEST_FILE="$(mktemp)"
 # Get the directory where the script is located
 SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 
+function section_title() {
+    echo "${1}"
+    printf '%*s\n' "${#1}" | tr ' ' '-'
+}
+
 function transform_xml() {
     if [ ! -s "${1}" ]; then
         echo "Error: XML file is empty (${1})" >&2
@@ -32,11 +37,6 @@ function expected() {
         echo "Output does not match expected (${3})"
         exit 1
     fi
-}
-
-function section_title() {
-    echo "${1}"
-    printf '%*s\n' "${#1}" | tr ' ' '-'
 }
 
 # Check if Docker image exists
