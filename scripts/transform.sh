@@ -51,6 +51,9 @@ PARENT_DIR="$(dirname "${SCRIPT_DIR}")"
 cd "${PARENT_DIR}"
 
 function transform_xml() {
+    # todo: Each time transform attempt, log whether any change was detected. Report at end.
+    # the log will be valuable to indicate that expected changes were made
+    # the log would also indicate the fixes which are impacting most manuscripts
     if [[ "${WITHIN_DOCKER}" == "true" ]]; then
         /usr/local/bin/apply-xslt "${1}" "${2}"
     else
