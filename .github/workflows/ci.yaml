@@ -23,4 +23,4 @@ jobs:
       - name: Run tests in docker container
         run: |
           docker buildx build -t epp-biorxiv-xslt-test -f Dockerfile.test .
-          docker run --rm /app/project_tests.sh
+          docker run --rm epp-biorxiv-xslt-test /app/project_tests.sh
