@@ -39,6 +39,12 @@ function section_title() {
     printf '%*s\n' "${#1}" | tr ' ' '-'
 }
 
+# Check if Docker image exists
+if [[ "$(docker images -q epp-biorxiv-xslt 2> /dev/null)" == "" ]]; then
+    # Build Docker image
+    docker buildx build -t epp-biorxiv-xslt .
+fi
+
 section_title "Checking fixtures that have all xslt transforms applied (no doi match)"
 for xml_file in ${SCRIPT_DIR}/test/all/*.xml; do
     echo "Running test for (${xml_file})"
