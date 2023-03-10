@@ -1,8 +1,13 @@
 # Modify bioRxiv XML in preparation for Encoda
+
+## Build docker image
 ```
 docker buildx build -t epp-biorxiv-xslt .
-cat test/fixtures/kitchen-sink.xml | docker run --rm -i epp-biorxiv-xslt /app/scripts/transform.sh
-cat test/fixtures/2022.05.30.22275761/2022.05.30.22275761.xml | docker run --rm -i epp-biorxiv-xslt /app/scripts/transform.sh
+```
+
+## Apply transform to XML
+```
+cat test/fixtures/2022.05.30.22275761/2022.05.30.22275761.xml | docker run --rm -i epp-biorxiv-xslt /app/scripts/transform.sh --doi 2022.05.30.22275761
 ```
 
 # Run tests
