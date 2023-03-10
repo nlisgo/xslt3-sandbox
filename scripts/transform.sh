@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 INPUT_FILE="$(mktemp)"
 TRANSFORM_FILE="$(mktemp)"
@@ -54,6 +55,11 @@ fi
 
 # Preserve hexadecimal notation
 cat /dev/stdin | sed -E "s/&#x([0-9A-F]{4});/HEX\1NOTATION/g" > "${INPUT_FILE}"
+
+if [ ! -s "${INPUT_FILE}" ]; then
+    echo "Error: Input XML is empty" >&2
+    exit 1
+fi
 
 # Apply XSLT transform
 if [[ -z "${XSL_FILE}" ]]; then
