@@ -41,13 +41,10 @@ function section_title() {
 
 section_title "Checking fixtures that have all xslt transforms applied (no doi match)"
 for xml_file in ${SCRIPT_DIR}/test/all/*.xml; do
-    xml_filename=$(basename "${xml_file}")
-    if [ ! -d "${SCRIPT_DIR}/src/${xml_filename%.*}" ]; then
-        echo "Running test for (${xml_file})"
-        transform_xml "${SCRIPT_DIR}/test/fixtures//$(basename ${xml_file})" > "${TEST_FILE}"
+    echo "Running test for (${xml_file})"
+    transform_xml "${SCRIPT_DIR}/test/fixtures/$(basename ${xml_file})" > "${TEST_FILE}"
 
-        expected "${TEST_FILE}" "${xml_file}" "${xml_file}"
-    fi
+    expected "${TEST_FILE}" "${xml_file}" "${xml_file}"
 done
 
 section_title "Checking xslt files that apply to all manuscripts"
@@ -70,9 +67,9 @@ done
 section_title "Checking fixtures that have all xslt transforms applied (doi match)"
 for manuscript_dir in ${SCRIPT_DIR}/src/*/; do
     manuscript_doi=$(basename "${manuscript_dir}")
-    for xml_file in ${SCRIPT_DIR}/test/all/${manuscript_doi}*.xml; do
+    for xml_file in ${SCRIPT_DIR}/test/all/${manuscript_doi}/*.xml; do
         echo "Running test for (${xml_file})"
-        transform_xml "${SCRIPT_DIR}/test/fixtures/$(basename ${xml_file})" --doi "${manuscript_doi}" > "${TEST_FILE}"
+        transform_xml "${SCRIPT_DIR}/test/fixtures/${manuscript_doi}/$(basename ${xml_file})" --doi "${manuscript_doi}" > "${TEST_FILE}"
 
         expected "${TEST_FILE}" "${xml_file}" "${xml_file}"
     done
@@ -86,7 +83,7 @@ for xsl_file in ${SCRIPT_DIR}/src/*/*.xsl; do
     if [ -d "${SCRIPT_DIR}/test/${xsl_file_dir}/${xsl_filename%.*}" ]; then
         echo "Running tests for (${xsl_file})"
         for xml_file in ${SCRIPT_DIR}/test/${xsl_file_dir}/${xsl_filename%.*}/*.xml; do
-            transform_xml "${SCRIPT_DIR}/test/fixtures/$(basename ${xml_file})" "${xsl_file}" > "${TEST_FILE}"
+            transform_xml "${SCRIPT_DIR}/test/fixtures/${xsl_file_dir}/$(basename ${xml_file})" "${xsl_file}" > "${TEST_FILE}"
 
             expected "${TEST_FILE}" "${xml_file}" "$(basename ${xml_file}) - ${xsl_file_dir}/${xsl_filename}"
         done
