@@ -44,7 +44,7 @@ PARENT_DIR="$(dirname "${SCRIPT_DIR}")"
 cd "${PARENT_DIR}"
 
 function transform_xml() {
-    docker run --rm -v "${PARENT_DIR}/src:/data" -v "$1:/input.xml" -v "$2:/stylesheet.xsl" epp-biorxiv-xslt /usr/local/bin/apply-xslt /input.xml /stylesheet.xsl
+    docker run --rm -v "${PARENT_DIR}/src:/app" -v "$1:/input.xml" -v "$2:/stylesheet.xsl" epp-biorxiv-xslt /usr/local/bin/apply-xslt /input.xml /stylesheet.xsl
 }
 
 # Check if Docker image exists

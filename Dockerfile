@@ -12,9 +12,9 @@ RUN chmod +x /usr/local/bin/apply-xslt
 
 RUN touch /JATS-archivearticle1.dtd
 
-VOLUME /data
+VOLUME /app
 
-WORKDIR /data
+WORKDIR /app
 
 EXPOSE 5005
 
