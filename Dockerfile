@@ -12,6 +12,10 @@ RUN chmod +x /usr/local/bin/apply-xslt
 
 RUN touch /JATS-archivearticle1.dtd
 
+RUN touch /tmp/JATS-archivearticle1.dtd
+
+ENV DOCKER_EPP_BIORXIV_XSLT=1
+
 WORKDIR /app
 
 COPY scripts /app/scripts

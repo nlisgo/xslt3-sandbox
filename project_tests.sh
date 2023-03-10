@@ -2,6 +2,7 @@
 set -e
 
 TEST_FILE="$(mktemp)"
+INPUT_FILE="$(mktemp)"
 
 # Get the directory where the script is located
 SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
@@ -38,12 +39,6 @@ function expected() {
         exit 1
     fi
 }
-
-# Check if Docker image exists
-if [[ "$(docker images -q epp-biorxiv-xslt 2> /dev/null)" == "" ]]; then
-    # Build Docker image
-    docker buildx build -t epp-biorxiv-xslt .
-fi
 
 section_title "Checking fixtures that have all xslt transforms applied (no doi match)"
 for xml_file in ${SCRIPT_DIR}/test/all/*.xml; do

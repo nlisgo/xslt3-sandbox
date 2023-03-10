@@ -19,3 +19,8 @@ jobs:
 
       - name: Run tests
         run: ./project_tests.sh
+
+      - name: Run tests in docker container
+        run: |
+          docker buildx build -t epp-biorxiv-xslt .
+          docker run --rm -v "./project_tests.sh:/app/project_tests.sh" -v "./test:/app/test" epp-biorxiv-xslt /app/project_tests.sh

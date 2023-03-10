@@ -5,6 +5,13 @@ INPUT_FILE="$(mktemp)"
 TRANSFORM_FILE="$(mktemp)"
 OUTPUT_FILE="$(mktemp)"
 
+# Set WITHIN_DOCKER variable to true if DOCKER_EPP_BIORXIV_XSLT is set
+if [[ -n "${DOCKER_EPP_BIORXIV_XSLT}" ]]; then
+    WITHIN_DOCKER=true
+else
+    WITHIN_DOCKER=false
+fi
+
 usage() {
     echo "Usage: $0 [-d|--doi DOI] [XSL_FILE]"
     exit 1
@@ -44,13 +51,17 @@ PARENT_DIR="$(dirname "${SCRIPT_DIR}")"
 cd "${PARENT_DIR}"
 
 function transform_xml() {
-    # Check if Docker image exists
-    if [[ "$(docker images -q epp-biorxiv-xslt 2> /dev/null)" == "" ]]; then
-        # Build Docker image
-        docker buildx build -t epp-biorxiv-xslt .
-    fi
+    if [[ "${WITHIN_DOCKER}" == "true" ]]; then
+        /usr/local/bin/apply-xslt "${1}" "${2}"
+    else
+        # Check if Docker image exists
+        if [[ "$(docker images -q epp-biorxiv-xslt 2> /dev/null)" == "" ]]; then
+            # Build Docker image
+            docker buildx build -t epp-biorxiv-xslt .
+        fi
 
-    docker run --rm -v "${PARENT_DIR}/src:/app" -v "$1:/input.xml" -v "$2:/stylesheet.xsl" epp-biorxiv-xslt /usr/local/bin/apply-xslt /input.xml /stylesheet.xsl
+        docker run --rm -v "${PARENT_DIR}/src:/app" -v "${1}:/input.xml" -v "${2}:/stylesheet.xsl" epp-biorxiv-xslt /usr/local/bin/apply-xslt /input.xml /stylesheet.xsl
+    fi
 }
 
 # Preserve hexadecimal notation
