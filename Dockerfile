@@ -1,6 +1,6 @@
 FROM openjdk:11
 
-RUN apt-get update && apt-get install -y wget
+RUN apt-get update && apt-get install -y wget libxml2-utils
 
 RUN wget https://repo1.maven.org/maven2/net/sf/saxon/Saxon-HE/10.5/Saxon-HE-10.5.jar \
     && mkdir -p /usr/share/java \
