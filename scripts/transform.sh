@@ -54,12 +54,6 @@ done
 SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 PARENT_DIR="$(dirname "${SCRIPT_DIR}")"
 
-if [[ "${WITHIN_DOCKER}" == "true" ]]; then
-    if [[ -e /session.log ]]; then
-        SESSION_LOG_FILE="/session.log"
-    fi
-fi
-
 cd "${PARENT_DIR}"
 
 function write_to_log() {

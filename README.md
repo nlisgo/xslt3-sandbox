@@ -13,7 +13,7 @@ cat test/fixtures/2022.05.30.22275761/2022.05.30.22275761.xml | docker run --rm 
 Introduce logging:
 ```
 touch session.log
-cat test/fixtures/2022.05.30.22275761/2022.05.30.22275761.xml | docker run --rm -i "./session.log:/session.log" epp-biorxiv-xslt /app/scripts/transform.sh --doi 2022.05.30.22275761
+cat test/fixtures/2022.05.30.22275761/2022.05.30.22275761.xml | docker run --rm -i "./session.log:/session.log" epp-biorxiv-xslt /app/scripts/transform.sh --doi 2022.05.30.22275761 --log /session.log
 ```
 
 # Run tests
