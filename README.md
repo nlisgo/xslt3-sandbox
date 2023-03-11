@@ -1,5 +1,10 @@
 # Modify bioRxiv XML in preparation for Encoda
 
+Prerequisites:
+
+- docker
+- libxml2-utils (if running on host)
+
 ## Build docker image
 ```
 docker buildx build -t epp-biorxiv-xslt .
