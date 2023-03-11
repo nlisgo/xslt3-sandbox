@@ -2,6 +2,14 @@ name: Verify XSLT transforms
 on: push
 
 jobs:
+  documentation-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Check for entry for each XSL in documentation
+        run: ./scripts/verify-documentation.sh
   project-tests:
     runs-on: ubuntu-latest
     steps:
