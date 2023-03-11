@@ -65,9 +65,9 @@ function write_to_log() {
 
 function write_to_log_xslt() {
     if diff -w -u "${2}" "${3}" >/dev/null; then
-        local change_log="changed"
-    else
         local change_log="no change applied"
+    else
+        local change_log="changed"
     fi
 
     write_to_log "(DOI: ${DOI}) - ${1} ${change_log}"
