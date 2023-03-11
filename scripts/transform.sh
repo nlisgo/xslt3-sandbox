@@ -50,6 +50,14 @@ PARENT_DIR="$(dirname "${SCRIPT_DIR}")"
 
 cd "${PARENT_DIR}"
 
+function write_to_log() {
+    if [[ "${WITHIN_DOCKER}" == "true" ]]; then
+        if [[ -e /session.log ]]; then
+            echo "$(date +"%Y-%m-%d %H:%M:%S"): ${1}" >> /session.log
+        fi
+    fi
+}
+
 function transform_xml() {
     # todo: Each time transform attempt, log whether any change was detected. Report at end.
     # the log will be valuable to indicate that expected changes were made

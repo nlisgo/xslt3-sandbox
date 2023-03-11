@@ -10,6 +10,12 @@ docker buildx build -t epp-biorxiv-xslt .
 cat test/fixtures/2022.05.30.22275761/2022.05.30.22275761.xml | docker run --rm -i epp-biorxiv-xslt /app/scripts/transform.sh --doi 2022.05.30.22275761
 ```
 
+Introduce logging:
+```
+touch session.log
+cat test/fixtures/2022.05.30.22275761/2022.05.30.22275761.xml | docker run --rm -i "./session.log:/session.log" epp-biorxiv-xslt /app/scripts/transform.sh --doi 2022.05.30.22275761
+```
+
 # Run tests
 
 ## Run smoke tests
@@ -24,6 +30,7 @@ cat test/fixtures/2022.05.30.22275761/2022.05.30.22275761.xml | docker run --rm 
 
 ## Run projects tests entirely within docker container
 ```
+docker buildx build -t epp-biorxiv-xslt .
 docker buildx build -t epp-biorxiv-xslt-test -f Dockerfile.test .
 docker run --rm epp-biorxiv-xslt-test /app/project_tests.sh
 ```

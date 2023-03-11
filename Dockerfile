@@ -1,6 +1,6 @@
 FROM openjdk:11
 
-RUN apt-get update && apt-get install -y wget vim
+RUN apt-get update && apt-get install -y wget
 
 RUN wget https://repo1.maven.org/maven2/net/sf/saxon/Saxon-HE/10.5/Saxon-HE-10.5.jar \
     && mkdir -p /usr/share/java \
@@ -23,7 +23,5 @@ COPY scripts /app/scripts
 RUN chmod +x -R /app/scripts/*
 
 COPY src /app/src
-
-EXPOSE 5005
 
 CMD ["/bin/bash"]
