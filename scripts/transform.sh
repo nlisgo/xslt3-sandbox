@@ -131,17 +131,19 @@ fi
 
 # Apply XSLT transform
 if [[ -z "${XSL_FILE}" ]]; then
-    # Apply XSLT transform to all XSL files in src/all folder
+    # Apply XSLT transform to all XSL files in src/ folder
     for xsl_file in $PARENT_DIR/src/*.xsl; do
         transform_xml "${INPUT_FILE}" "${xsl_file}" > "${TRANSFORM_FILE}"
         cat "${TRANSFORM_FILE}" > "${INPUT_FILE}"
     done
     if [[ -n "${DOI}" ]]; then
-        # Apply XSLT transform to all XSL files in src/all folder
-        for xsl_file in $PARENT_DIR/src/$DOI/*.xsl; do
-            transform_xml "${INPUT_FILE}" "${xsl_file}" > "${TRANSFORM_FILE}"
-            cat "${TRANSFORM_FILE}" > "${INPUT_FILE}"
-        done
+        if [[ -d "${PARENT_DIR}/src/${DOI}" ]]; then
+            # Apply XSLT transform to all XSL files in src/[DOI]/ folder
+            for xsl_file in $PARENT_DIR/src/$DOI/*.xsl; do
+                transform_xml "${INPUT_FILE}" "${xsl_file}" > "${TRANSFORM_FILE}"
+                cat "${TRANSFORM_FILE}" > "${INPUT_FILE}"
+            done
+        fi
     fi
 else
     transform_xml "${INPUT_FILE}" "${XSL_FILE}" > "${TRANSFORM_FILE}"

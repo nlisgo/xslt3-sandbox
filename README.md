@@ -16,6 +16,19 @@ touch session.log
 cat test/fixtures/2022.05.30.22275761/2022.05.30.22275761.xml | docker run --rm -i "./session.log:/session.log" epp-biorxiv-xslt /app/scripts/transform.sh --doi 2022.05.30.22275761 --log /session.log
 ```
 
+## Process a folder of biorXiv XML
+
+The structure of the xml withinthe source folder will be preserved in the destination folder.
+
+```
+./scripts/process-folder.sh /path/to/SOURCE_DIR /path/to/DEST_DIR
+```
+
+Run with logs:
+```
+./scripts/process-folder.sh /path/to/SOURCE_DIR /path/to/DEST_DIR --log ./process-folder.log
+```
+
 # Run tests
 
 ## Run smoke tests
