@@ -17,15 +17,18 @@ function transform_xml() {
         exit 1
     fi
 
+    # touch "${SCRIPT_DIR}/project-tests.log"
+    # local debug=" --log ${SCRIPT_DIR}/project-tests.log"
+
     if [ "${2:-}" = "--doi" ]; then
-        cat "${1}" | "${SCRIPT_DIR}/scripts/transform.sh" --doi "${3}"
+        cat "${1}" | "${SCRIPT_DIR}/scripts/transform.sh" --doi "${3}"${debug:-}
     else
         if [ -n "$2" ] && [ ! -e "$2" ]; then
             echo "Error: XSLT file is empty (${2})" >&2
             exit 1
         fi
 
-        cat "${1}" | "${SCRIPT_DIR}/scripts/transform.sh" "${2:-}"
+        cat "${1}" | "${SCRIPT_DIR}/scripts/transform.sh" "${2:-}"${debug:-}
     fi
 }
 
