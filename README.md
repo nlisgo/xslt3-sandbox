@@ -23,7 +23,7 @@ cat test/fixtures/2022.05.30.22275761/2022.05.30.22275761.xml | docker run --rm 
 
 ## Process a folder of biorXiv XML
 
-The structure of the xml withinthe source folder will be preserved in the destination folder.
+The structure of the xml within the source folder will be preserved in the destination folder.
 
 ```
 ./scripts/process-folder.sh /path/to/SOURCE_DIR /path/to/DEST_DIR
