@@ -1,13 +1,12 @@
 #!/bin/bash
 set -e
 
-TEST_FILE="$(mktemp)"
-
 usage() {
     echo "Usage: $0 [-l|--log SESSION_LOG_FILE]"
     exit 1
 }
 
+TEST_FILE="$(mktemp)"
 XSL_FILE=""
 DOI=""
 SESSION_LOG_FILE=""
