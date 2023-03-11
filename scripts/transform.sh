@@ -13,13 +13,15 @@ else
 fi
 
 usage() {
-    echo "Usage: $0 [-d|--doi DOI] [XSL_FILE]"
+    echo "Usage: $0 [-d|--doi DOI] [-l|--log SESSION_LOG_FILE] [--log-info SESSION_LOG_FILE_INFO] [--log-noprefix] [XSL_FILE]"
     exit 1
 }
 
 XSL_FILE=""
 DOI=""
 SESSION_LOG_FILE=""
+SESSION_LOG_FILE_INFO=""
+SESSION_LOG_PREFIX=true
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -30,6 +32,14 @@ while [[ "$#" -gt 0 ]]; do
         -l|--log)
             SESSION_LOG_FILE="$2"
             shift 2
+            ;;
+        --log-info)
+            SESSION_LOG_FILE_INFO="$2"
+            shift 2
+            ;;
+        --log-noprefix)
+            SESSION_LOG_PREFIX=false
+            shift
             ;;
         -h|--help)
             usage
@@ -58,19 +68,35 @@ cd "${PARENT_DIR}"
 
 function write_to_log() {
     if [[ -n "${SESSION_LOG_FILE}" ]]; then
+        local log_prefix=""
+        local log_info=""
+
+        if [[ "${SESSION_LOG_PREFIX}" = true ]]; then
+            log_prefix="$(date +"%Y-%m-%d %H:%M:%S"): "
+        fi
+
+        if [[ -n "${SESSION_LOG_FILE_INFO}" ]]; then
+            log_info="[info: ${SESSION_LOG_FILE_INFO}] "
+        fi
+
         touch "${SESSION_LOG_FILE}"
-        echo "$(date +"%Y-%m-%d %H:%M:%S"): ${1}" >> "${SESSION_LOG_FILE}"
+        echo "${log_prefix}${log_info}${1}" >> "${SESSION_LOG_FILE}"
     fi
 }
 
 function write_to_log_xslt() {
-    if diff -w -u "${2}" "${3}" >/dev/null; then
-        local change_log="no change applied"
-    else
-        local change_log="changed"
+    local change_log="no change applied"
+    local doi_set="N/A"
+
+    if ! diff -w -u "${2}" "${3}" >/dev/null; then
+        change_log="changed"
     fi
 
-    write_to_log "(DOI: ${DOI}) - ${1} ${change_log}"
+    if [[ -n "${DOI}" ]]; then
+        doi_set="${DOI}"
+    fi
+
+    write_to_log "(DOI: ${doi_set}) ${1#*src/} ${change_log}"
 }
 
 function transform_xml() {

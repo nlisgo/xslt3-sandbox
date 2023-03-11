@@ -3,6 +3,40 @@ set -e
 
 TEST_FILE="$(mktemp)"
 
+usage() {
+    echo "Usage: $0 [-l|--log SESSION_LOG_FILE]"
+    exit 1
+}
+
+XSL_FILE=""
+DOI=""
+SESSION_LOG_FILE=""
+
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -l|--log)
+            SESSION_LOG_FILE="$2"
+            shift 2
+            ;;
+        -h|--help)
+            usage
+            ;;
+        -*)
+            echo "Unknown option: $1" >&2
+            usage
+            ;;
+        *)
+            if [[ -z "$XSL_FILE" ]]; then
+                XSL_FILE="$1"
+            else
+                echo "Unexpected parameter: $1" >&2
+                usage
+            fi
+            shift
+            ;;
+    esac
+done
+
 # Get the directory where the script is located
 SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 
@@ -17,8 +51,10 @@ function transform_xml() {
         exit 1
     fi
 
-    # touch "${SCRIPT_DIR}/project-tests.log"
-    # local debug=" --log ${SCRIPT_DIR}/project-tests.log"
+    if [[ -n "${SESSION_LOG_FILE}" ]]; then
+        touch "${SESSION_LOG_FILE}"
+        local debug=" --log ${SCRIPT_DIR}/project-tests.log --log-info ${1#*fixtures/} --log-noprefix"
+    fi
 
     if [ "${2:-}" = "--doi" ]; then
         cat "${1}" | "${SCRIPT_DIR}/scripts/transform.sh" --doi "${3}"${debug:-}
