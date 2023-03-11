@@ -30,7 +30,7 @@ function transform_xml() {
 }
 
 function expected() {
-    if diff -w -u "${1}" "${2}"; then
+    if diff -w -u "${1}" "${2}" >/dev/null; then
         echo "Output matches expected (${3})"
         echo ""
     else
