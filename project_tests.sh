@@ -169,11 +169,20 @@ successful comparison with: convert-all-caps-title-to-title-case/kitchen-sink.xm
 [info: kitchen-sink.xml] (DOI: N/A) convert-doi-links-to-pub-id-elements.xsl changed
 successful comparison with: convert-doi-links-to-pub-id-elements/kitchen-sink.xml
 
+[info: 2021.11.12.468444/2021.11.12.468444.xml] (DOI: 2021.11.12.468444) change-label-and-title-elements.xsl changed
+[info: 2021.11.12.468444/2021.11.12.468444.xml] (DOI: 2021.11.12.468444) convert-all-caps-title-to-title-case.xsl changed
+[info: 2021.11.12.468444/2021.11.12.468444.xml] (DOI: 2021.11.12.468444) convert-doi-links-to-pub-id-elements.xsl no change applied
+[info: 2021.11.12.468444/2021.11.12.468444.xml] (DOI: 2021.11.12.468444) 2021.11.12.468444/remove-supplementary-materials.xsl changed
+successful comparison with: all/2021.11.12.468444/2021.11.12.468444.xml
+
 [info: 2022.05.30.22275761/2022.05.30.22275761.xml] (DOI: 2022.05.30.22275761) change-label-and-title-elements.xsl changed
-[info: 2022.05.30.22275761/2022.05.30.22275761.xml] (DOI: 2022.05.30.22275761) convert-all-caps-title-to-title-case.xsl no change applied
-[info: 2022.05.30.22275761/2022.05.30.22275761.xml] (DOI: 2022.05.30.22275761) convert-doi-links-to-pub-id-elements.xsl no change applied
+[info: 2022.05.30.22275761/2022.05.30.22275761.xml] (DOI: 2022.05.30.22275761) convert-all-caps-title-to-title-case.xsl changed
+[info: 2022.05.30.22275761/2022.05.30.22275761.xml] (DOI: 2022.05.30.22275761) convert-doi-links-to-pub-id-elements.xsl changed
 [info: 2022.05.30.22275761/2022.05.30.22275761.xml] (DOI: 2022.05.30.22275761) 2022.05.30.22275761/remove-supplementary-materials.xsl changed
 successful comparison with: all/2022.05.30.22275761/2022.05.30.22275761.xml
+
+[info: 2021.11.12.468444/2021.11.12.468444.xml] (DOI: N/A) 2021.11.12.468444/remove-supplementary-materials.xsl changed
+successful comparison with: 2021.11.12.468444/remove-supplementary-materials/2021.11.12.468444.xml
 
 [info: 2022.05.30.22275761/2022.05.30.22275761.xml] (DOI: N/A) 2022.05.30.22275761/remove-supplementary-materials.xsl changed
 successful comparison with: 2022.05.30.22275761/remove-supplementary-materials/2022.05.30.22275761.xml
