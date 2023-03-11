@@ -31,12 +31,6 @@ Run with logs:
 
 # Run tests
 
-## Run smoke tests
-```
-./smoke_tests.sh
-```
-
-## Run projects tests
 ```
 ./project_tests.sh
 ```

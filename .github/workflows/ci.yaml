@@ -15,11 +15,3 @@ jobs:
         run: |
           docker buildx build -t epp-biorxiv-xslt-test -f Dockerfile.test .
           docker run --rm epp-biorxiv-xslt-test /app/project_tests.sh --log /app/project-tests.log
-  process-folder:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Run ./scripts/process-folder.sh
-        run: ./scripts/process-folder.sh ./test/fixtures ./process-folder-dest

@@ -189,4 +189,12 @@ EOF
     echo ""
 fi
 
-echo "Done!"
+section_title "Verify ./scripts/process-folder.sh"
+
+PROCESS_FOLDER_TMP=$(mktemp -d)
+
+"${SCRIPT_DIR}/scripts/process-folder.sh" "${SCRIPT_DIR}/test/fixtures" "${PROCESS_FOLDER_TMP}"
+
+rm -rf "${PROCESS_FOLDER_TMP}"
+
+echo "All done!"
