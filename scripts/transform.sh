@@ -19,10 +19,16 @@ usage() {
 
 XSL_FILE=""
 DOI=""
+SESSION_LOG_FILE=""
+
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -d|--doi)
             DOI="$2"
+            shift 2
+            ;;
+        -l|--log)
+            SESSION_LOG_FILE="$2"
             shift 2
             ;;
         -h|--help)
@@ -48,22 +54,36 @@ done
 SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 PARENT_DIR="$(dirname "${SCRIPT_DIR}")"
 
+if [[ "${WITHIN_DOCKER}" == "true" ]]; then
+    if [[ -e /session.log ]]; then
+        SESSION_LOG_FILE="/session.log"
+    fi
+fi
+
 cd "${PARENT_DIR}"
 
 function write_to_log() {
-    if [[ "${WITHIN_DOCKER}" == "true" ]]; then
-        if [[ -e /session.log ]]; then
-            echo "$(date +"%Y-%m-%d %H:%M:%S"): ${1}" >> /session.log
-        fi
+    if [[ -n "${SESSION_LOG_FILE}" ]]; then
+        touch "${SESSION_LOG_FILE}"
+        echo "$(date +"%Y-%m-%d %H:%M:%S"): ${1}" >> "${SESSION_LOG_FILE}"
     fi
 }
 
+function write_to_log_xslt() {
+    if diff -w -u "${2}" "${3}" >/dev/null; then
+        local change_log="changed"
+    else
+        local change_log="no change applied"
+    fi
+
+    write_to_log "(DOI: ${DOI}) - ${1} ${change_log}"
+}
+
 function transform_xml() {
-    # todo: Each time transform attempt, log whether any change was detected. Report at end.
-    # the log will be valuable to indicate that expected changes were made
-    # the log would also indicate the fixes which are impacting most manuscripts
+    local xslt_output=$(mktemp)
+
     if [[ "${WITHIN_DOCKER}" == "true" ]]; then
-        /usr/local/bin/apply-xslt "${1}" "${2}"
+        /usr/local/bin/apply-xslt "${1}" "${2}" > "${xslt_output}"
     else
         # Check if Docker image exists
         if [[ "$(docker images -q epp-biorxiv-xslt 2> /dev/null)" == "" ]]; then
@@ -71,8 +91,14 @@ function transform_xml() {
             docker buildx build -t epp-biorxiv-xslt .
         fi
 
-        docker run --rm -v "${PARENT_DIR}/src:/app" -v "${1}:/input.xml" -v "${2}:/stylesheet.xsl" epp-biorxiv-xslt /usr/local/bin/apply-xslt /input.xml /stylesheet.xsl
+        docker run --rm -v "${PARENT_DIR}/src:/app" -v "${1}:/input.xml" -v "${2}:/stylesheet.xsl" epp-biorxiv-xslt /usr/local/bin/apply-xslt /input.xml /stylesheet.xsl > "${xslt_output}"
     fi
+
+    write_to_log_xslt "${2}" "${1}" "${xslt_output}"
+
+    cat "${xslt_output}"
+
+    rm -f "${xslt_output}"
 }
 
 # Preserve hexadecimal notation
@@ -109,6 +135,6 @@ echo "" >> "${OUTPUT_FILE}"
 
 cat "${OUTPUT_FILE}"
 
-rm "${INPUT_FILE}"
-rm "${TRANSFORM_FILE}"
-rm "${OUTPUT_FILE}"
+rm -f "${INPUT_FILE}"
+rm -f "${TRANSFORM_FILE}"
+rm -f "${OUTPUT_FILE}"
