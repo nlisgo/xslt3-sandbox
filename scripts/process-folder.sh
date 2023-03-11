@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+if ! command -v xmllint &> /dev/null; then
+    echo "Error: xmllint command not found" >&2
+    exit 1
+fi
+
 usage() {
     echo "Usage: $0 [-l|--log SESSION_LOG_FILE] SOURCE_DIR DEST_DIR"
     exit 1
