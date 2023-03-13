@@ -27,6 +27,10 @@ This stylesheet is transforming an XML document by removing any "sec" element wi
 
 TODO: We need an expression of whether we believe this is work for biorXiv, encoda or EPP team.
 
+### [/src/2022.05.30.22275761/add-missing-aff-for-AK-v1.xsl](/src/2022.05.30.22275761/add-missing-aff-for-AK-v1.xsl)
+
+This xsl is adding a missing affiliation for the first author. Affiliations a linked to using an `<xref>` element, which is a child of the author's `<contrib contrib-type="author">` element. This was presumably a typesetting error.
+
 # Modify bioRxiv XML in preparation for Encoda
 
 Prerequisites:
