@@ -11,11 +11,19 @@ Please provide links to github issues which express these requirements.
 
 In the entry for each XSL file please link to the file in github.
 
-## Global xslt
+## Global XSLT
 
 ### [/src/change-label-and-title-elements.xsl](/src/change-label-and-title-elements.xsl)
 
 This stylesheet is transforming an XML document by adding a "label" element to any "title" element that has a preceding "label" element, and removing any "label" element that has a following "title" element.
+
+TODO: We need an expression of whether we believe this is work for biorXiv, encoda or EPP team.
+
+## Manuscript specific XSLT
+
+### [/src/2021.11.12.468444/remove-supplementary-materials.xsl](/src/2021.11.12.468444/remove-supplementary-materials.xsl)
+
+This stylesheet is transforming an XML document by removing any "sec" element with a "sec-type" attribute value of "supplementary-material", and copying the remaining elements into a new "body" element in the output document.
 
 TODO: We need an expression of whether we believe this is work for biorXiv, encoda or EPP team.
 
