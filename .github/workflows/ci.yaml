@@ -27,9 +27,9 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y libxml2-utils
 
       - name: Run tests
-        run: ./project_tests.sh --log ./project-tests.log
+        run: ./project_tests.sh
 
       - name: Run tests in docker container
         run: |
           docker buildx build -t epp-biorxiv-xslt-test -f Dockerfile.test .
-          docker run --rm epp-biorxiv-xslt-test /app/project_tests.sh --log /app/project-tests.log
+          docker run --rm epp-biorxiv-xslt-test /app/project_tests.sh
