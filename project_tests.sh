@@ -83,17 +83,21 @@ function transform_xml() {
 }
 
 function expected() {
-    if diff -w -u "${1}" "${2}" >/dev/null; then
+    local actual_xml="${1}"
+    local expected_xml="${2}"
+    local debug_actual="${SCRIPT_DIR}/actual-$(date +%Y%m%d-%H%M-%S).xml"
+
+    if diff -w -u "${actual_xml}" "${expected_xml}" >/dev/null; then
         echo "Output matches expected (${3#*test/})"
         write_to_log_comparison "${2#*test/}"
         echo ""
     else
         echo "Output does not match expected (${3#*test/})" >&2
+        cat "${actual_xml}" > "${debug_actual}"
+        echo "The XML that was produced that differs from ${3} is available here: ${debug_actual}"
         exit 1
     fi
 }
-
-# todo: allow XML to be only tested against a specific xslt
 
 section_title "Checking fixtures that have all xslt transforms applied (no doi match)"
 for xml_file in ${SCRIPT_DIR}/test/all/*.xml; do
@@ -123,12 +127,17 @@ done
 section_title "Checking fixtures that have all xslt transforms applied (doi match)"
 for manuscript_dir in ${SCRIPT_DIR}/src/*/; do
     manuscript_doi=$(basename "${manuscript_dir}")
-    for xml_file in ${SCRIPT_DIR}/test/all/${manuscript_doi}/*.xml; do
-        echo "Running test for (${xml_file#*test/})"
-        transform_xml "${SCRIPT_DIR}/test/fixtures/${manuscript_doi}/$(basename ${xml_file})" --doi "${manuscript_doi}" > "${TEST_FILE}"
+    if [ -d "${SCRIPT_DIR}/test/all/${manuscript_doi}" ]; then
+        for xml_file in ${SCRIPT_DIR}/test/all/${manuscript_doi}/*.xml; do
+            echo "Running test for (${xml_file#*test/})"
+            transform_xml "${SCRIPT_DIR}/test/fixtures/${manuscript_doi}/$(basename ${xml_file})" --doi "${manuscript_doi}" > "${TEST_FILE}"
 
-        expected "${TEST_FILE}" "${xml_file}" "${xml_file}"
-    done
+            expected "${TEST_FILE}" "${xml_file}" "${xml_file}"
+        done
+    else
+        echo "Consider adding expected output in ${SCRIPT_DIR}/test/all/${manuscript_doi}"
+        echo ""
+    fi
 done
 
 section_title "Checking xslt files that apply to specific manuscripts"
