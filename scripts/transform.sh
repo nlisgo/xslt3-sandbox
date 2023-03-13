@@ -99,11 +99,31 @@ function write_to_log_xslt() {
     write_to_log "(DOI: ${doi_set}) ${1#*src/} ${change_log}"
 }
 
+function encode_hexadecimal_notation() {
+    sed -E "s/&#x([0-9A-F]{4});/HEX\1NOTATION/g"
+}
+
+function restore_hexadecimal_notation() {
+    sed -E "s/HEX([0-9A-F]{4})NOTATION/\&#x\1;/g"
+}
+
+function restore_doctype() {
+    sed "s#<?xml version=\"1.0\" encoding=\"UTF-8\"?>#<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE article PUBLIC \"-//NLM//DTD JATS (Z39.96) Journal Archiving and Interchange DTD v1.2d1 20170631//EN\" \"JATS-archivearticle1.dtd\">\n#g"
+}
+
+function remove_empty_lines() {
+    sed '/^$/d'
+}
+
 function transform_xml() {
     local xslt_output=$(mktemp)
+    local xslt_file_dir=$(mktemp -d)
+    local xslt_file="${xslt_file_dir}/$(basename ${2})"
+
+    cat "${2}" | encode_hexadecimal_notation > "${xslt_file}"
 
     if [[ "${WITHIN_DOCKER}" == "true" ]]; then
-        /usr/local/bin/apply-xslt "${1}" "${2}" > "${xslt_output}"
+        /usr/local/bin/apply-xslt "${1}" "${xslt_file}" > "${xslt_output}"
     else
         # Check if Docker image exists
         if [[ "$(docker images -q epp-biorxiv-xslt 2> /dev/null)" == "" ]]; then
@@ -111,7 +131,7 @@ function transform_xml() {
             docker buildx build -t epp-biorxiv-xslt .
         fi
 
-        docker run --rm -v "${PARENT_DIR}/src:/app" -v "${1}:/input.xml" -v "${2}:/stylesheet.xsl" epp-biorxiv-xslt /usr/local/bin/apply-xslt /input.xml /stylesheet.xsl > "${xslt_output}"
+        docker run --rm -v "${PARENT_DIR}/src:/app" -v "${1}:/input.xml" -v "${xslt_file}:/stylesheet.xsl" epp-biorxiv-xslt /usr/local/bin/apply-xslt /input.xml /stylesheet.xsl > "${xslt_output}"
     fi
 
     write_to_log_xslt "${2}" "${1}" "${xslt_output}"
@@ -119,10 +139,10 @@ function transform_xml() {
     cat "${xslt_output}"
 
     rm -f "${xslt_output}"
+    rm -f "${xslt_file}"
 }
 
-# Preserve hexadecimal notation
-cat /dev/stdin | sed -E "s/&#x([0-9A-F]{4});/HEX\1NOTATION/g" > "${INPUT_FILE}"
+cat /dev/stdin | encode_hexadecimal_notation > "${INPUT_FILE}"
 
 if [ ! -s "${INPUT_FILE}" ]; then
     echo "Error: Input XML is empty" >&2
@@ -150,7 +170,7 @@ else
 fi
 
 # Remove empty lines, restore DOCTYPE and restore hexadecimal notation
-cat "${TRANSFORM_FILE}" | sed '/^$/d' | sed "s#<?xml version=\"1.0\" encoding=\"UTF-8\"?>#<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE article PUBLIC \"-//NLM//DTD JATS (Z39.96) Journal Archiving and Interchange DTD v1.2d1 20170631//EN\" \"JATS-archivearticle1.dtd\">\n#g" | sed -E "s/HEX([0-9A-F]{4})NOTATION/\&#x\1;/g" > "${OUTPUT_FILE}"
+cat "${TRANSFORM_FILE}" | remove_empty_lines | restore_doctype | restore_hexadecimal_notation > "${OUTPUT_FILE}"
 
 # Append an empty line to the file
 echo "" >> "${OUTPUT_FILE}"

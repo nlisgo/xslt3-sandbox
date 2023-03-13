@@ -181,11 +181,20 @@ successful comparison with: all/2021.11.12.468444/2021.11.12.468444.xml
 [info: 2022.05.30.22275761/2022.05.30.22275761.xml] (DOI: 2022.05.30.22275761) 2022.05.30.22275761/remove-supplementary-materials.xsl changed
 successful comparison with: all/2022.05.30.22275761/2022.05.30.22275761.xml
 
+[info: 2022.07.26.501569/2022.07.26.501569.xml] (DOI: 2022.07.26.501569) change-label-and-title-elements.xsl changed
+[info: 2022.07.26.501569/2022.07.26.501569.xml] (DOI: 2022.07.26.501569) convert-all-caps-title-to-title-case.xsl no change applied
+[info: 2022.07.26.501569/2022.07.26.501569.xml] (DOI: 2022.07.26.501569) convert-doi-links-to-pub-id-elements.xsl changed
+[info: 2022.07.26.501569/2022.07.26.501569.xml] (DOI: 2022.07.26.501569) 2022.07.26.501569/move-ecole-into-institution.xsl changed
+successful comparison with: all/2022.07.26.501569/2022.07.26.501569.xml
+
 [info: 2021.11.12.468444/2021.11.12.468444.xml] (DOI: N/A) 2021.11.12.468444/remove-supplementary-materials.xsl changed
 successful comparison with: 2021.11.12.468444/remove-supplementary-materials/2021.11.12.468444.xml
 
 [info: 2022.05.30.22275761/2022.05.30.22275761.xml] (DOI: N/A) 2022.05.30.22275761/remove-supplementary-materials.xsl changed
 successful comparison with: 2022.05.30.22275761/remove-supplementary-materials/2022.05.30.22275761.xml
+
+[info: 2022.07.26.501569/2022.07.26.501569.xml] (DOI: N/A) 2022.07.26.501569/move-ecole-into-institution.xsl changed
+successful comparison with: 2022.07.26.501569/move-ecole-into-institution/2022.07.26.501569.xml
 EOF
     )
 
