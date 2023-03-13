@@ -85,16 +85,23 @@ function transform_xml() {
 function expected() {
     local actual_xml="${1}"
     local expected_xml="${2}"
+    local source_xml="${3}"
+    local description="${4}"
     local debug_actual="${SCRIPT_DIR}/actual-$(date +%Y%m%d-%H%M-%S).xml"
 
+    if diff -w -u "${source_xml}" "${expected_xml}" >/dev/null; then
+        echo "Source XML (${source_xml#*test/}) must differ from expected result (${expected_xml#*test/})" >&2
+        exit 1
+    fi
+
     if diff -w -u "${actual_xml}" "${expected_xml}" >/dev/null; then
-        echo "Output matches expected (${3#*test/})"
-        write_to_log_comparison "${2#*test/}"
+        echo "Output matches expected (${description#*test/})"
+        write_to_log_comparison "${expected_xml#*test/}"
         echo ""
     else
-        echo "Output does not match expected (${3#*test/})" >&2
+        echo "Output does not match expected (${description#*test/})" >&2
         cat "${actual_xml}" > "${debug_actual}"
-        echo "The XML that was produced that differs from ${3} is available here: ${debug_actual}"
+        echo "The XML that was produced that differs from ${description} is available here: ${debug_actual}"
         exit 1
     fi
 }
@@ -104,7 +111,7 @@ for xml_file in ${SCRIPT_DIR}/test/all/*.xml; do
     echo "Running test for (${xml_file#*test/})"
     transform_xml "${SCRIPT_DIR}/test/fixtures/$(basename ${xml_file})" > "${TEST_FILE}"
 
-    expected "${TEST_FILE}" "${xml_file}" "${xml_file}"
+    expected "${TEST_FILE}" "${xml_file}" "${SCRIPT_DIR}/test/fixtures/$(basename ${xml_file})" "${xml_file}"
 done
 
 section_title "Checking xslt files that apply to all manuscripts"
@@ -116,7 +123,7 @@ for xsl_file in ${SCRIPT_DIR}/src/*.xsl; do
         for xml_file in ${SCRIPT_DIR}/test/${xsl_filename%.*}/*.xml; do
             transform_xml "${SCRIPT_DIR}/test/fixtures/$(basename ${xml_file})" "${xsl_file}" > "${TEST_FILE}"
 
-            expected "${TEST_FILE}" "${xml_file}" "$(basename ${xml_file}) - ${xsl_filename}"
+            expected "${TEST_FILE}" "${xml_file}" "${SCRIPT_DIR}/test/fixtures/$(basename ${xml_file})" "$(basename ${xml_file}) - ${xsl_filename}"
         done
     else
         echo "No tests exist for (${xsl_file#*test/})" >&2
@@ -132,7 +139,7 @@ for manuscript_dir in ${SCRIPT_DIR}/src/*/; do
             echo "Running test for (${xml_file#*test/})"
             transform_xml "${SCRIPT_DIR}/test/fixtures/${manuscript_doi}/$(basename ${xml_file})" --doi "${manuscript_doi}" > "${TEST_FILE}"
 
-            expected "${TEST_FILE}" "${xml_file}" "${xml_file}"
+            expected "${TEST_FILE}" "${xml_file}" "${SCRIPT_DIR}/test/fixtures/${manuscript_doi}/$(basename ${xml_file})" "${xml_file}"
         done
     else
         echo "Consider adding expected output in ${SCRIPT_DIR}/test/all/${manuscript_doi}"
@@ -150,7 +157,7 @@ for xsl_file in ${SCRIPT_DIR}/src/*/*.xsl; do
         for xml_file in ${SCRIPT_DIR}/test/${xsl_file_dir}/${xsl_filename%.*}/*.xml; do
             transform_xml "${SCRIPT_DIR}/test/fixtures/${xsl_file_dir}/$(basename ${xml_file})" "${xsl_file}" > "${TEST_FILE}"
 
-            expected "${TEST_FILE}" "${xml_file}" "$(basename ${xml_file}) - ${xsl_file_dir}/${xsl_filename}"
+            expected "${TEST_FILE}" "${xml_file}" "${SCRIPT_DIR}/test/fixtures/${xsl_file_dir}/$(basename ${xml_file})" "$(basename ${xml_file}) - ${xsl_file_dir}/${xsl_filename}"
         done
     else
         echo "No tests exist for (${xsl_file#*test/})" >&2
