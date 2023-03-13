@@ -93,6 +93,8 @@ function expected() {
     fi
 }
 
+# todo: allow XML to be only tested against a specific xslt
+
 section_title "Checking fixtures that have all xslt transforms applied (no doi match)"
 for xml_file in ${SCRIPT_DIR}/test/all/*.xml; do
     echo "Running test for (${xml_file#*test/})"
