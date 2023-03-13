@@ -1,3 +1,24 @@
+# Documentation justifying each XSL file
+
+Must contain an entry for each XSL file justifying the need for this. The more detail the better.
+
+Documentation should include recommendations for how each XSL file could ultimately be removed by one of:
+- improved biorXiv XML
+- better handling of XML in Encoda
+- better support for Encoda output in EPP client
+
+Please provide links to github issues which express these requirements.
+
+In the entry for each XSL file please link to the file in github.
+
+## Global xslt
+
+### [/src/change-label-and-title-elements.xsl](/src/change-label-and-title-elements.xsl)
+
+This stylesheet is transforming an XML document by adding a "label" element to any "title" element that has a preceding "label" element, and removing any "label" element that has a following "title" element.
+
+TODO: We need an expression of whether we believe this is work for biorXiv, encoda or EPP team.
+
 # Modify bioRxiv XML in preparation for Encoda
 
 Prerequisites:
@@ -39,10 +60,20 @@ docker buildx build -t epp-biorxiv-xslt .
 cat test/fixtures/2022.05.30.22275761/2022.05.30.22275761.xml | docker run --rm -i epp-biorxiv-xslt /app/scripts/transform.sh --doi 2022.05.30.22275761
 ```
 
+Output to a file:
+```
+cat test/fixtures/2022.05.30.22275761/2022.05.30.22275761.xml | docker run --rm -i epp-biorxiv-xslt /app/scripts/transform.sh --doi 2022.05.30.22275761 > output.xml
+```
+
 Introduce logging:
 ```
 touch session.log
 cat test/fixtures/2022.05.30.22275761/2022.05.30.22275761.xml | docker run --rm -i -v "./session.log:/session.log" epp-biorxiv-xslt /app/scripts/transform.sh --doi 2022.05.30.22275761 --log /session.log
+```
+
+Apply only a single xslt:
+```
+cat test/fixtures/kitchen-sink.xml | docker run --rm -i epp-biorxiv-xslt /app/scripts/transform.sh /app/src/change-label-and-title-elements.xsl
 ```
 
 ## Process a folder of biorXiv XML

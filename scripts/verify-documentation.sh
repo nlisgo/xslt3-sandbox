@@ -4,7 +4,7 @@ set -e
 # Get the directory where the script is located
 SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 PARENT_DIR="$(dirname "${SCRIPT_DIR}")"
-DOCUMENTATION_FILE="${PARENT_DIR}/XSL_DOCUMENTATION.md"
+DOCUMENTATION_FILE="${PARENT_DIR}/README.md"
 DOCUMENTATION_ERROR=false
 
 verify_docs () {
