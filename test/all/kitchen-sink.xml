@@ -484,6 +484,7 @@
 <p>Datasets from VDJdb were downloaded from <ext-link ext-link-type="uri" xlink:href="https://vdjdb.cdr3.net">https://vdjdb.cdr3.net</ext-link>. Datasets from McPAS-TCR were downloaded from <ext-link ext-link-type="uri" xlink:href="http://friedmanlab.weizmann.ac.il/McPAS-TCR/">http://friedmanlab.weizmann.ac.il/McPAS-TCR/</ext-link>. We manually curated these datasets to be sure to use only &#x03B2;CDR3s from CD8 tetramer-specific cells.</p>
 <p>Single-cell datasets from 10X genomics were downloaded from <ext-link ext-link-type="uri" xlink:href="https://support.10xgenomics.com/single-cell-vdj/datasets">https://support.10xgenomics.com/single-cell-vdj/datasets</ext-link> (&#x2018;Application Note - A New Way of Exploring Immunity&#x2019; section, datasets &#x2018;CD8&#x002B; T cells of Healthy Donor&#x2019; 1&#x2013;4, available under the Creative Commons Attribution license).</p>
 <p>Data from the donors are available on request to the authors.</p>
+<p>An example of a doi link we shouldn't adjust with /src/convert-doi-links-to-pub-id-elements.xsl <ext-link ext-link-type="uri" xlink:href="https://doi.org/10.5281/zenodo.6686927">https://doi.org/10.5281/zenodo.6686927</ext-link> (<xref ref-type="bibr" rid="c51">Ottenheimer et al., 2022</xref>).</p>
 </sec>
 <sec>
 <fig id="figS1" position="float" orientation="portrait" fig-type="figure">
