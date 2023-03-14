@@ -100,11 +100,11 @@ function write_to_log_xslt() {
 }
 
 function encode_hexadecimal_notation() {
-    sed -E "s/&#x([0-9A-F]{4});/HEX\1NOTATION/g"
+    sed -E "s/&#x([0-9a-F]{2,});/HEX\1NOTATION/g"
 }
 
 function restore_hexadecimal_notation() {
-    sed -E "s/HEX([0-9A-F]{4})NOTATION/\&#x\1;/g"
+    sed -E "s/HEX([0-9a-F]{2,})NOTATION/\&#x\1;/g"
 }
 
 function restore_doctype() {
