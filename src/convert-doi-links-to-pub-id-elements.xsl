@@ -10,7 +10,7 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="ext-link[@ext-link-type='uri'][starts-with(lower-case(@xlink:href), 'https://doi.org/')]">
+  <xsl:template match="ref//ext-link[@ext-link-type='uri'][starts-with(lower-case(@xlink:href), 'https://doi.org/')]">
     <xsl:element name="pub-id">
       <xsl:attribute name="pub-id-type">doi</xsl:attribute>
       <xsl:value-of select="substring(@xlink:href, string-length('https://doi.org/')+1)"/>
