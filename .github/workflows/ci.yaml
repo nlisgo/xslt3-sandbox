@@ -30,7 +30,7 @@ jobs:
         run: ./project_tests.sh --log ./project-tests.log
 
       - name: Preserve project-tests.log as artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: test-results
           path: ./project-tests.log
