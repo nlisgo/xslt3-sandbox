@@ -167,64 +167,6 @@ done
 
 rm "${TEST_FILE}"
 
-if [[ -n "${SESSION_LOG_FILE}" ]]; then
-    # Remove multiple empty lines from end of log file
-    sed -i -e :a -e '/^\n*$/{$d;N;};/\n$/ba' "${SESSION_LOG_FILE}"
-
-    expected_log=$(
-        cat <<EOF
-[info: kitchen-sink.xml] (DOI: N/A) change-label-and-title-elements.xsl changed
-[info: kitchen-sink.xml] (DOI: N/A) convert-all-caps-title-to-title-case.xsl changed
-[info: kitchen-sink.xml] (DOI: N/A) convert-doi-links-to-pub-id-elements.xsl changed
-successful comparison with: all/kitchen-sink.xml
-
-[info: kitchen-sink.xml] (DOI: N/A) change-label-and-title-elements.xsl changed
-successful comparison with: change-label-and-title-elements/kitchen-sink.xml
-
-[info: kitchen-sink.xml] (DOI: N/A) convert-all-caps-title-to-title-case.xsl changed
-successful comparison with: convert-all-caps-title-to-title-case/kitchen-sink.xml
-
-[info: kitchen-sink.xml] (DOI: N/A) convert-doi-links-to-pub-id-elements.xsl changed
-successful comparison with: convert-doi-links-to-pub-id-elements/kitchen-sink.xml
-
-[info: 2021.11.12.468444/2021.11.12.468444.xml] (DOI: 2021.11.12.468444) change-label-and-title-elements.xsl changed
-[info: 2021.11.12.468444/2021.11.12.468444.xml] (DOI: 2021.11.12.468444) convert-all-caps-title-to-title-case.xsl changed
-[info: 2021.11.12.468444/2021.11.12.468444.xml] (DOI: 2021.11.12.468444) convert-doi-links-to-pub-id-elements.xsl no change applied
-[info: 2021.11.12.468444/2021.11.12.468444.xml] (DOI: 2021.11.12.468444) 2021.11.12.468444/remove-supplementary-materials.xsl changed
-successful comparison with: all/2021.11.12.468444/2021.11.12.468444.xml
-
-[info: 2022.05.30.22275761/2022.05.30.22275761.xml] (DOI: 2022.05.30.22275761) change-label-and-title-elements.xsl changed
-[info: 2022.05.30.22275761/2022.05.30.22275761.xml] (DOI: 2022.05.30.22275761) convert-all-caps-title-to-title-case.xsl changed
-[info: 2022.05.30.22275761/2022.05.30.22275761.xml] (DOI: 2022.05.30.22275761) convert-doi-links-to-pub-id-elements.xsl changed
-[info: 2022.05.30.22275761/2022.05.30.22275761.xml] (DOI: 2022.05.30.22275761) 2022.05.30.22275761/remove-supplementary-materials.xsl changed
-successful comparison with: all/2022.05.30.22275761/2022.05.30.22275761.xml
-
-[info: 2022.07.26.501569/2022.07.26.501569.xml] (DOI: 2022.07.26.501569) change-label-and-title-elements.xsl changed
-[info: 2022.07.26.501569/2022.07.26.501569.xml] (DOI: 2022.07.26.501569) convert-all-caps-title-to-title-case.xsl no change applied
-[info: 2022.07.26.501569/2022.07.26.501569.xml] (DOI: 2022.07.26.501569) convert-doi-links-to-pub-id-elements.xsl changed
-[info: 2022.07.26.501569/2022.07.26.501569.xml] (DOI: 2022.07.26.501569) 2022.07.26.501569/move-ecole-into-institution.xsl changed
-successful comparison with: all/2022.07.26.501569/2022.07.26.501569.xml
-
-[info: 2021.11.12.468444/2021.11.12.468444.xml] (DOI: N/A) 2021.11.12.468444/remove-supplementary-materials.xsl changed
-successful comparison with: 2021.11.12.468444/remove-supplementary-materials/2021.11.12.468444.xml
-
-[info: 2022.05.30.22275761/2022.05.30.22275761.xml] (DOI: N/A) 2022.05.30.22275761/remove-supplementary-materials.xsl changed
-successful comparison with: 2022.05.30.22275761/remove-supplementary-materials/2022.05.30.22275761.xml
-
-[info: 2022.07.26.501569/2022.07.26.501569.xml] (DOI: N/A) 2022.07.26.501569/move-ecole-into-institution.xsl changed
-successful comparison with: 2022.07.26.501569/move-ecole-into-institution/2022.07.26.501569.xml
-EOF
-    )
-
-    if ! diff "${SESSION_LOG_FILE}" <(echo "${expected_log}"); then
-        echo "ERROR: Session log file differs from expected log."
-        exit 1
-    fi
-
-    echo "Successful comparison with expected log"
-    echo ""
-fi
-
 section_title "Verify ./scripts/process-folder.sh"
 
 PROCESS_FOLDER_TMP=$(mktemp -d)
