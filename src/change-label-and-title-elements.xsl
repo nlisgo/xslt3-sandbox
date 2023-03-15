@@ -14,6 +14,7 @@
       <xsl:element name="label">
         <xsl:copy-of select="preceding-sibling::label[1]/node()"/>
       </xsl:element>
+      <xsl:text> </xsl:text>
       <xsl:apply-templates select="node()"/>
     </xsl:copy>
   </xsl:template>
