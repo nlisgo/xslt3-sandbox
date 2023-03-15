@@ -55,6 +55,14 @@ TODO: We need an expression of whether we believe this is work for biorXiv, enco
 
 Adjusts 2 of the affiliations where the department is being treated as an address rather than in the institution. This would have to require a bioRxiv adjustment. There is no way we could discern from the XML otherwise.
 
+There may be another example in 10.1101/2022.10.21.513138:
+
+```
+<aff id="a1"><label>1</label><institution>Univ-Bordeaux, Centre de Recherche Cardio-thoracique de Bordeaux</institution>, U1045, D&#x00E9;partement de Pharmacologie, CIC1401, Pessac, <country>France</country></aff>
+```
+
+It is clear that we could not hope to automatically capture these without improving the XML representation.
+
 ### [/src/2022.05.30.22275761/add-missing-aff-for-AK-v1.xsl](/src/2022.05.30.22275761/add-missing-aff-for-AK-v1.xsl)
 
 This xsl is adding a missing affiliation for the first author. Affiliations a linked to using an `<xref>` element, which is a child of the author's `<contrib contrib-type="author">` element. This was presumably a typesetting error that could be (or have been) fixed on bioRxiv's end, but we haven't established how best to feedback this kind of problem. This is one of the 'examples' we launched with back in October, and has now been published as an (old style) VOR, so I'm not sure how we want to specifically handle it.
