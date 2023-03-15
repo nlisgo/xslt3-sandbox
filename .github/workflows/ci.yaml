@@ -29,13 +29,16 @@ jobs:
       - name: Run tests
         run: ./project_tests.sh --log ./project-tests.log
 
+      - name: Run tests in docker container
+        run: |
+          docker buildx build -t epp-biorxiv-xslt-test -f Dockerfile.test .
+          docker run --rm epp-biorxiv-xslt-test /app/project_tests.sh
+
+      - name: Output project-tests.log
+        run: cat ./project-tests.log
+
       - name: Preserve project-tests.log as artifact
         uses: actions/upload-artifact@v3
         with:
           name: test-results
           path: ./project-tests.log
-
-      - name: Run tests in docker container
-        run: |
-          docker buildx build -t epp-biorxiv-xslt-test -f Dockerfile.test .
-          docker run --rm epp-biorxiv-xslt-test /app/project_tests.sh

@@ -13,22 +13,6 @@ In the entry for each XSL file please link to the file in github.
 
 ## Global XSLT
 
-### [/src/doi-underscore.xsl](/src/doi-underscore.xsl)
-
-Solves an issue with doi's that have underscores. A couple of examples of this can be found in: 10.1101/2022.11.10.516056.
-
-```
-<ref id="c59">... doi: 10.1162/jocn{\_}a{\_}01569.</mixed-citation></ref>
-```
-
-should, of course, be:
-
-```
-<ref id="c59">... doi: 10.1162/jocn_a_01569.</mixed-citation></ref>
-```
-
-This is an issue with the bioRxiv XML.
-
 ### [/src/convert-all-caps-title-to-title-case.xsl](/src/convert-all-caps-title-to-title-case.xsl)
 
 This is a candidate for removal. If titles are provided as all caps in the original we should not be changing it - there are too many exceptions (words that should remain as upper case) to appropriately handle this.
@@ -53,7 +37,7 @@ TODO: We need an expression of whether we believe this is work for biorXiv, enco
 
 ### [/src/2022.07.26.501569/move-ecole-into-institution.xsl](/src/2022.07.26.501569/move-ecole-into-institution.xsl)
 
-Adjusts 2 of the affiliations where the department is being treated as an address rather than in the institution. This would have to require a bioRxiv adjustment. There is no way we could discern from the XML otherwise.
+Adjusts 2 of the affiliations where the department is being treated as an address rather than in the institution. This is an EPP client issue as we can not get at these values another way. 
 
 There may be another example in 10.1101/2022.10.21.513138:
 
@@ -61,7 +45,7 @@ There may be another example in 10.1101/2022.10.21.513138:
 <aff id="a1"><label>1</label><institution>Univ-Bordeaux, Centre de Recherche Cardio-thoracique de Bordeaux</institution>, U1045, D&#x00E9;partement de Pharmacologie, CIC1401, Pessac, <country>France</country></aff>
 ```
 
-It is clear that we could not hope to automatically capture these without improving the XML representation.
+It can be fixed by treating affiliations as mixed content (pulling in the text content of aff as well as `institution`, `country` etc.), and the change has been implemented in encoda v0.121.1 - see https://github.com/elifesciences/enhanced-preprints-issues/issues/343.
 
 ### [/src/2022.05.30.22275761/add-missing-aff-for-AK-v1.xsl](/src/2022.05.30.22275761/add-missing-aff-for-AK-v1.xsl)
 
