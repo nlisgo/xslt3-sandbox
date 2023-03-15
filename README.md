@@ -13,6 +13,26 @@ In the entry for each XSL file please link to the file in github.
 
 ## Global XSLT
 
+### [/src/doi-underscore.xsl](/src/doi-underscore.xsl)
+
+Solves an issue with doi's that have underscores. A couple of examples of this can be found in: 10.1101/2022.11.10.516056.
+
+```
+<ref id="c59">... doi: 10.1162/jocn{\_}a{\_}01569.</mixed-citation></ref>
+```
+
+should, of course, be:
+
+```
+<ref id="c59">... doi: 10.1162/jocn_a_01569.</mixed-citation></ref>
+```
+
+This is an issue with the bioRxiv XML.
+
+### [/src/convert-all-caps-title-to-title-case.xsl](/src/convert-all-caps-title-to-title-case.xsl)
+
+This is a candidate for removal. If titles are provided as all caps in the original we should not be changing it - there are too many exceptions (words that should remain as upper case) to appropriately handle this.
+
 ### [/src/change-label-and-title-elements.xsl](/src/change-label-and-title-elements.xsl)
 
 This stylesheet is transforming an XML document by adding a "label" element to any "title" element that has a preceding "label" element, and removing any "label" element that has a following "title" element. Work is required in encoda to approprately decode these labels, so that they can then be represented in the resultant JSON.
@@ -30,6 +50,10 @@ This xsl converts `<ext-link>` elements within references (`<ref>`) that have a 
 This stylesheet is transforming an XML document by removing any "sec" element with a "sec-type" attribute value of "supplementary-material", and copying the remaining elements into a new "body" element in the output document.
 
 TODO: We need an expression of whether we believe this is work for biorXiv, encoda or EPP team.
+
+### [/src/2022.07.26.501569/move-ecole-into-institution.xsl](/src/2022.07.26.501569/move-ecole-into-institution.xsl)
+
+Adjusts 2 of the affiliations where the department is being treated as an address rather than in the institution. This would have to require a bioRxiv adjustment. There is no way we could discern from the XML otherwise.
 
 ### [/src/2022.05.30.22275761/add-missing-aff-for-AK-v1.xsl](/src/2022.05.30.22275761/add-missing-aff-for-AK-v1.xsl)
 
