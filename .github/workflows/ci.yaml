@@ -27,7 +27,13 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y libxml2-utils
 
       - name: Run tests
-        run: ./project_tests.sh
+        run: ./project_tests.sh --log ./project-tests.log
+
+      - name: Preserve project-tests.log as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: ./project-tests.log
 
       - name: Run tests in docker container
         run: |
