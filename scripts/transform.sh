@@ -99,6 +99,40 @@ function write_to_log_xslt() {
     write_to_log "(DOI: ${doi_set}) ${1#*src/} ${change_log}"
 }
 
+function handle_stdin() {
+    local input="$(cat /dev/stdin)"
+
+    if [[ "${input: -1}" != $'\n' ]]; then
+        input="${input}"$'\n'
+    fi
+
+    echo "${input}"
+}
+
+function encode_xmlns_attribute() {
+    # Set a flag to determine whether we have seen the first <front> tag
+    local seen_front=false
+    
+    # Read input line by line
+    while read -r line; do
+        # If we have seen <front>, replace all instances of "xmlns:" with "xmlns-preserve-"
+        if $seen_front; then
+            echo "$line" | sed 's/xmlns:/xmlns-preserve-/g'
+        else
+            echo "$line"
+        fi
+        
+        # Check if this line contains <front>
+        if echo "$line" | grep -q '<front>'; then
+            seen_front=true
+        fi
+    done
+}
+
+function restore_xmlns_attribute() {
+    sed 's/xmlns-preserve-/xmlns:/g'
+}
+
 function encode_hexadecimal_notation() {
     sed -E "s/&#x([0-9a-F]{2,});/HEX\1NOTATION/g"
 }
@@ -142,12 +176,7 @@ function transform_xml() {
     rm -f "${xslt_file}"
 }
 
-cat /dev/stdin | encode_hexadecimal_notation > "${INPUT_FILE}"
-
-if [ ! -s "${INPUT_FILE}" ]; then
-    echo "Error: Input XML is empty" >&2
-    exit 1
-fi
+handle_stdin | encode_xmlns_attribute | encode_hexadecimal_notation > "${INPUT_FILE}"
 
 # Apply XSLT transform
 if [[ -z "${XSL_FILE}" ]]; then
@@ -170,7 +199,7 @@ else
 fi
 
 # Remove empty lines, restore DOCTYPE and restore hexadecimal notation
-cat "${TRANSFORM_FILE}" | remove_empty_lines | restore_doctype | restore_hexadecimal_notation > "${OUTPUT_FILE}"
+cat "${TRANSFORM_FILE}" | remove_empty_lines | restore_doctype | restore_hexadecimal_notation | restore_xmlns_attribute > "${OUTPUT_FILE}"
 
 # Append an empty line to the file
 echo "" >> "${OUTPUT_FILE}"
