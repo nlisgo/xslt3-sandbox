@@ -134,11 +134,11 @@ function restore_xmlns_attribute() {
 }
 
 function encode_hexadecimal_notation() {
-    sed -E "s/&#x([0-9a-F]{2,});/HEX\1NOTATION/g"
+    sed -E "s/&#x([0-9A-F]{2,});/HEX\1NOTATION/gi"
 }
 
 function restore_hexadecimal_notation() {
-    sed -E "s/HEX([0-9a-F]{2,})NOTATION/\&#x\1;/g"
+    sed -E "s/HEX([0-9A-F]{2,})NOTATION/\&#x\1;/gi"
 }
 
 function restore_doctype() {
@@ -173,7 +173,7 @@ function transform_xml() {
     cat "${xslt_output}"
 
     rm -f "${xslt_output}"
-    rm -f "${xslt_file}"
+    rm -rf "${xslt_file_dir}"
 }
 
 handle_stdin | encode_xmlns_attribute | encode_hexadecimal_notation > "${INPUT_FILE}"
